@@ -8,4 +8,5 @@ public class Relation {
 	
 	Relation(){};
 	Relation(String InFileName){};  // implement a constructor for every input file format we want to support
+	Relation(ArrayList<String> Schema, String InFileName){};  // implement a constructor for every input file format we want to support
 }
