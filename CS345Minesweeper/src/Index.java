@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 
@@ -6,11 +9,12 @@ public class Index {
 	IndexNode Root;
 	
 	// construct an Index; assuming data is a SET of tuples
-	public Index(ArrayList<Tuple> Data, ArrayList<Integer> AttributeOrder){
+	public Index(Relation R){
+		ArrayList<Integer> AttributeOrder = R.GetAttributeOrder();
 		Height = AttributeOrder.size();
 		Root = new IndexNode();
-		for(int TupleIdx = 0; TupleIdx < Data.size(); TupleIdx++){
-			Tuple t = Data.get(TupleIdx);
+		for(int TupleIdx = 0; TupleIdx < R.GetSize(); TupleIdx++){
+			Tuple t = R.GetTuple(TupleIdx);
 			IndexNode CurrNode = Root;
 			for(int i = 0; i < Height; i++){
 				int Key = t.GetAttrVal(AttributeOrder.get(i));
@@ -76,5 +80,22 @@ public class Index {
 		return CurrNode.FindKey(a);
 	}
 	
-	public void Dump(String OutFileName){}
+	// prints the keys and record ids of all the nodes in BFS order
+	public void Dump(File F) throws FileNotFoundException{
+		PrintWriter Writer = new PrintWriter(F);
+		ArrayList<IndexNode> Q = new ArrayList<IndexNode>();
+		Q.add(Root);
+		int i = 0;
+		while(i < Q.size()){
+			IndexNode CurrNode = Q.get(i);
+			CurrNode.Dump(Writer);
+			i++;
+			for(int j = 0; j < CurrNode.GetSize(); j++){
+				if(CurrNode.GetChild(j) != null){
+					Q.add(CurrNode.GetChild(j));
+				}
+			}
+		}	
+	}
+	
 }

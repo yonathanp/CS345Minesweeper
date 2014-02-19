@@ -1,3 +1,4 @@
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -60,5 +61,12 @@ public class IndexNode {
 	
 	public int GetSize(){
 		return Keys.size();
+	}
+	
+	public void Dump(PrintWriter writer){
+		for(int i = 0; i < Keys.size(); i++){
+			writer.println(Keys.get(i) + " " + RecordIdx.get(i));
+		}
+		writer.println("--------------------------------------");
 	}
 }
