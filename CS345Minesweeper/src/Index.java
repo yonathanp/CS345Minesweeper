@@ -10,36 +10,47 @@ public class Index {
 	
 	// construct an Index; assuming data is a SET of tuples
 	public Index(Relation R){
+		int IdCounter = 0;
 		ArrayList<Integer> AttributeOrder = R.GetAttributeOrder();
 		Height = AttributeOrder.size();
 		Root = new IndexNode();
+		Root.SetId(0);
+		IdCounter++;
 		for(int TupleIdx = 0; TupleIdx < R.GetSize(); TupleIdx++){
 			Tuple t = R.GetTuple(TupleIdx);
 			IndexNode CurrNode = Root;
 			for(int i = 0; i < Height; i++){
 				int Key = t.GetAttrVal(AttributeOrder.get(i));
 				int KeyIdx = CurrNode.GetKeyIndex(Key);
+				//System.out.print(TupleIdx);
 				if(KeyIdx >= 0){
 					CurrNode = CurrNode.GetChild(KeyIdx);
 				} else{
 					int InsertIdx = -KeyIdx-1;
 					CurrNode.AddKey(InsertIdx, Key);
 					CurrNode.AddRecordIdx(InsertIdx,TupleIdx);
-					CurrNode.AddChild(InsertIdx);
-					CurrNode = CurrNode.GetChild(InsertIdx);
-					// no more common path - continue inserting the rest of the tuple in its own chain
-					for(int j = i+1; j < Height; j++){
-						CurrNode.AddKey(0, t.GetAttrVal(AttributeOrder.get(j)));
-						CurrNode.AddRecordIdx(0,TupleIdx);
-						if(j < Height-1){
-							CurrNode.AddChild(0);
-							CurrNode.GetChild(0);
+					if(i < Height-1){
+						CurrNode.AddChild(InsertIdx);
+						CurrNode = CurrNode.GetChild(InsertIdx);
+						CurrNode.SetId(IdCounter);
+						IdCounter++;
+						// no more common path - continue inserting the rest of the tuple in its own chain
+						for(int j = i+1; j < Height; j++){
+							CurrNode.AddKey(0, t.GetAttrVal(AttributeOrder.get(j)));
+							CurrNode.AddRecordIdx(0,TupleIdx);
+							if(j < Height-1){
+								CurrNode.AddChild(0);
+								CurrNode = CurrNode.GetChild(0);
+								CurrNode.SetId(IdCounter);
+								IdCounter++;
+							}
 						}
 					}
 					break;	// move on to next tuple
 				}
 			}
 		}
+		//System.out.println("Index has " + IdCounter + " nodes");
 	}
 	
 	// lookup a specific value in index
@@ -56,15 +67,16 @@ public class Index {
 		return -1;  // should never reach here
 	}
 	
-	// retrieve relation value for an index tuple - e.g. for (1,2) find the record with the second smallest
+	// retrieve relation value for an index tuple (a tuple of POSITIVE integers of arity <= Index.Height)
+	// Example: for (1,2) find the record with the second smallest
 	// value of A2 among the records with the smallest value of A1
 	public int RetrieveIndexTuple(ArrayList<Integer> IndexTuple){
 		if(IndexTuple.size() > Height){ return -1;}
 		IndexNode CurrNode = Root;
 		for(int i = 0; i < IndexTuple.size(); i++){
 			if(IndexTuple.get(i) > CurrNode.GetSize()){ return -1;}
-			if(i == IndexTuple.size()-1){ return CurrNode.GetRecordId(IndexTuple.get(i));}
-			CurrNode = CurrNode.GetChild(IndexTuple.get(i));
+			if(i == IndexTuple.size()-1){ return CurrNode.GetRecordId(IndexTuple.get(i)-1);}
+			CurrNode = CurrNode.GetChild(IndexTuple.get(i)-1);
 		}
 		return -1; // should never reach here
 	}
@@ -73,10 +85,11 @@ public class Index {
 	public IntPair FindGap(ArrayList<Integer> IndexTuple, int a){
 		if(IndexTuple.size() > Height-1){ return null;}
 		IndexNode CurrNode = Root;
-		for(int i = 0; i < IndexTuple.size()-1; i++){
+		for(int i = 0; i < IndexTuple.size(); i++){
 			if(IndexTuple.get(i) > CurrNode.GetSize()){ return null;}
-			CurrNode = CurrNode.GetChild(IndexTuple.get(i));
+			CurrNode = CurrNode.GetChild(IndexTuple.get(i)-1);
 		}
+		System.out.println(CurrNode.GetId());
 		return CurrNode.FindKey(a);
 	}
 	
@@ -88,14 +101,16 @@ public class Index {
 		int i = 0;
 		while(i < Q.size()){
 			IndexNode CurrNode = Q.get(i);
+			//System.out.println(CurrNode.GetId());
 			CurrNode.Dump(Writer);
 			i++;
-			for(int j = 0; j < CurrNode.GetSize(); j++){
-				if(CurrNode.GetChild(j) != null){
-					Q.add(CurrNode.GetChild(j));
+			if(!CurrNode.IsLeaf()){
+				for(int j = 0; j < CurrNode.GetSize(); j++){
+						Q.add(CurrNode.GetChild(j));
 				}
 			}
-		}	
+		}
+		Writer.close();
 	}
 	
 }

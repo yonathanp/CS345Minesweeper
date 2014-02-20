@@ -37,4 +37,8 @@ public class Relation {
 	public Tuple GetTuple(int Idx){
 		return new Tuple(Data.get(Idx));
 	}
+	
+	public void CreateIndex(){
+		I = new Index(this);
+	}
 }
