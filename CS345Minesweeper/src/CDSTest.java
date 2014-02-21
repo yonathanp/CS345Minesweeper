@@ -42,35 +42,31 @@ public class CDSTest {
 			System.out.println("Find Next " + a + " " + il.Next(a));
 			System.out.println("Covers " + a + "? " + il.Covers(a));
 		}	
-			
+		
 		ConstraintTree ct = new ConstraintTree();
-		Constraint c = new Constraint();
-		c.Interval = new IntPair(1,4);
-		c.IntervalComponentIndex = 5;
-		c.Values.add(-1);
-		c.Values.add(1);
-		c.Values.add(5);
-		c.Values.add(-1);
-		c.Values.add(3);
+		IntPair P = new IntPair(1,4);
+		ArrayList<Integer> V = new ArrayList<Integer>();
+		V.add(Constraint.WILDCARD);
+		V.add(1);
+		V.add(5);
+		V.add(Constraint.WILDCARD);
+		V.add(3);
+		Constraint c = new Constraint(V,P);
 		c.Dump();
 		
 		ct.InsertConstraint(c);
-		ct.Root.Dump();
-
+		ct.Dump();
+		P = new IntPair(4,6);
+		V.add(3);
+		V.add(2);
+		V.add(5);
+		V.add(-1);
+		c = new Constraint(V,P);
 		ct.InsertConstraint(c);
-		c = new Constraint();
-		c.Interval = new IntPair(4,6);
-		c.IntervalComponentIndex = 4;
-		c.Values.add(3);
-		c.Values.add(2);
-		c.Values.add(5);
-		c.Values.add(-1);
 		c.Dump();
 		
 		ct.InsertConstraint(c);
-		ct.Root.Dump();
-
-		
+		ct.Dump();	
 	}
 
 }

@@ -1,11 +1,7 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.TreeMap;
-
 
 public class ConstraintTreeNode {
-	SortedList Equalities;
-	IntervalList Intervals;
+	private SortedList Equalities;
+	private IntervalList Intervals;
 	
 	public ConstraintTreeNode() {
 		Equalities = new SortedList();
@@ -13,14 +9,36 @@ public class ConstraintTreeNode {
 	}
 
 	public void Dump(){
-		System.out.println("Node: {Intervals:[" + Intervals.Data.toString() + "], Equalities:[" + Equalities.Data.keySet() + "]} \t");
+		System.out.println("Node: {Intervals:[" + Intervals.toString() + "], Equalities:[" + Equalities.GetKeySet() + "]} \t");
 		System.out.println("Children:");
-		Object[] children = Equalities.Data.values().toArray();
-		ConstraintTreeNode child;
-		for(int i =0; i< children.length; i++ ){
-			child = (ConstraintTreeNode)children[i];
-			child.Dump();
+		ConstraintTreeNode[] Children = Equalities.GetVals();
+		for(ConstraintTreeNode Child : Children){
+			Child.Dump();
 		}
 		System.out.println("End Children:");
+	}
+	
+	public boolean Covers(int v){
+		return Intervals.Covers(v);
+	}
+	
+	public boolean Find(int v){
+		return Equalities.Find(v);
+	}
+	
+	public void Insert(int equality, ConstraintTreeNode node){
+		Equalities.Insert(equality, node);
+	}
+	
+	public ConstraintTreeNode GetChild(int equality){
+		return Equalities.GetVal(equality);
+	}
+	
+	public void InsertInterval(IntPair Interval){
+		Intervals.Insert(Interval.GetVal1(), Interval.GetVal2());
+	}
+	
+	public void DeleteEqualitiesInterval(IntPair Interval){
+		Equalities.DeleteInterval(Interval.GetVal1(), Interval.GetVal2());
 	}
 }

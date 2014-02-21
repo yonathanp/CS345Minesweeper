@@ -2,13 +2,31 @@ import java.util.ArrayList;
 
 
 public class Constraint {
-	public final Integer WILDCARD = -1;
-	int IntervalComponentIndex;
-	IntPair Interval;
-	ArrayList<Integer> Values;
+	public final static Integer WILDCARD = -1;
+	private int IntervalComponentIndex;
+	private IntPair Interval;
+	private ArrayList<Integer> Values;
 	
 	public Constraint() {
 		Values = new ArrayList<Integer>();
+	}
+	
+	public Constraint(ArrayList<Integer> V, IntPair I){
+		Values = new ArrayList<Integer>(V);
+		 Interval = new IntPair(I);
+		 IntervalComponentIndex = V.size();
+	}
+	
+	public int GetIntervalComponentIndex(){
+		return IntervalComponentIndex;
+	}
+	
+	public int GetPrefixElement(int i){
+		return Values.get(i);
+	}
+	
+	public IntPair GetInterval(){
+		return new IntPair(Interval);
 	}
 	
 	public void Dump() {

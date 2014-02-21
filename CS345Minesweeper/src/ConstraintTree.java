@@ -1,6 +1,6 @@
 
 public class ConstraintTree implements CDS {
-	ConstraintTreeNode Root;
+	private ConstraintTreeNode Root;
 	
 	public ConstraintTree() {
 		Root = new ConstraintTreeNode();
@@ -16,26 +16,25 @@ public class ConstraintTree implements CDS {
 	public void InsertConstraint(Constraint C) {
 		// Algorithm 5 in paper
 		ConstraintTreeNode v = Root;
-		for (int i = 0; i<C.IntervalComponentIndex; i++) {
-			Integer equality = C.Values.get(i);
-
-			if ( equality != C.WILDCARD && v.Intervals.Covers(equality)){
-				return;		
-			}	
-
-			if ( !v.Equalities.Find(equality) ){
+		for (int i = 0; i < C.GetIntervalComponentIndex(); i++) {
+			Integer equality = C.GetPrefixElement(i);
+			if ( equality != Constraint.WILDCARD && v.Covers(equality)){ return;}	
+			if ( !v.Find(equality) ){
 				ConstraintTreeNode new_node = new ConstraintTreeNode();
-				v.Equalities.Insert(equality, new_node);
+				v.Insert(equality, new_node);
 			}
-			v = v.Equalities.Data.get(equality);
+			v = v.GetChild(equality);
 		}
-		Integer l = C.Interval.GetVal1();
-		Integer r = C.Interval.GetVal2();
-		v.Intervals.Insert(l, r);
-		v.Equalities.DeleteInterval(l, r);
+		IntPair Interval = C.GetInterval();
+		v.InsertInterval(Interval);
+		v.DeleteEqualitiesInterval(Interval);
 	}
 	
 
-	int NextChainVal(){return 0;}
+	public int NextChainVal(){return 0;}
+	
+	public void Dump(){
+		Root.Dump();
+	}
 	
 }

@@ -8,6 +8,11 @@ public class IntPair {
 		Val2 = y;
 	}
 	
+	public IntPair(IntPair P) {
+		Val1 = P.GetVal1();
+		Val2 = P.GetVal2();
+	}
+
 	public int GetVal1(){ return Val1;}
 	public int GetVal2(){ return Val2;}
 	public boolean InRange(int x){ return (Val1 <= x) && (x <= Val2);}
