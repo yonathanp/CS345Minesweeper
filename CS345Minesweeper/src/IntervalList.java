@@ -1,16 +1,17 @@
 import java.util.TreeMap;
 import java.util.NavigableMap;
 
-public static final int L = 0;
-public static final int M = 1;
-public static final int R = 2;
+
 
 public class IntervalList {
+	public static final int L = 0;
+	public static final int M = 1;
+	public static final int R = 2;
 	TreeMap<Integer,Integer> Data;
 	
 	// construct an empty IntervalList
 	public IntervalList() {
-		Data = new TreeMap();
+		Data = new TreeMap<Integer,Integer>();
 	}
 	
 	// returns the smallest integer r suche that r >= v and r is not in any interval
@@ -43,31 +44,32 @@ public class IntervalList {
 		return false;
 	}
 
-	public Insert(Integer l, Integer r){
-		lCovered = Covers(l);
-		rCovered = Covers(r);
-		NavigableMap interval = Data.subMap(l, false, r, false);
+	public void Insert(Integer l, Integer r){
+		boolean lCovered = Covers(l);
+		boolean rCovered = Covers(r);
+		NavigableMap<Integer,Integer> interval = Data.subMap(l, false, r, false);
 		interval.clear();
 		if ( lCovered ) {
 			Data.put(l, M);
 		}
 		Integer lType = Data.get(l);
-		if ( lType == R ){
-			Data.put(l, M);
-		}
+
 		if ( lType == null ){
 			Data.put(l, L);
+		}
+		else if ( lType == R ){
+			Data.put(l, M);
 		}
 
 		if ( rCovered ) {
 			Data.put(r, M);
 		}
 		Integer rType = Data.get(r);
-		if ( rType == L ){
-			Data.put(r, M);
-		}
 		if ( rType == null ){
 			Data.put(r, R);
+		}
+		else if ( rType == L ){
+			Data.put(r, M);
 		}
 
 	}

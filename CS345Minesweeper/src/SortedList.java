@@ -1,35 +1,35 @@
-import java.util.TreeSet;
-import java.util.NavigableSet;
+import java.util.TreeMap;
+import java.util.NavigableMap;
 
 public class SortedList {
-	TreeSet<Integer> Data;
+	TreeMap<Integer,ConstraintTreeNode> Data;
 	
 	// construct an empty SortedList
 	public SortedList() {
-		Data = new TreeSet();
+		Data = new TreeMap<Integer,ConstraintTreeNode>();
 	}
 	
 	// find if an integer exists in the SortedList
 	public boolean Find(Integer v){
-		return Data.contains(v);
+		return Data.containsKey(v);
 	}
 	
 	// return the smallest x such that x >= v
 	public Integer FindLub(Integer v){
-		return Data.ceiling(v);
+		return Data.ceilingKey(v);
 	}
 
-	public Insert(Integer v){
-		Data.add(v);
+	public void Insert(Integer v, ConstraintTreeNode n){
+		Data.put(v, n);
 	}
 	
-	public Delete(Integer v){
+	public void Delete(Integer v){
 		Data.remove(v);
 	}
 
 	// delete all integers from l to v, exclusive
-	public DeleteInterval(Integer l, Integer r){
-		NavigableSet interval = Data.subSet(l, false, r, false);
+	public void DeleteInterval(Integer l, Integer r){
+		NavigableMap<Integer,ConstraintTreeNode> interval = Data.subMap(l, false, r, false);
 		interval.clear();
 	}
 
