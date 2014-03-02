@@ -57,12 +57,13 @@ public class CDSTest {
 		ct.InsertConstraint(c);
 		ct.Dump();
 		P = new IntPair(4,6);
+		V = new ArrayList<Integer>();
 		V.add(3);
 		V.add(2);
 		V.add(5);
-		V.add(-1);
+		V.add(Constraint.WILDCARD);
 		c = new Constraint(V,P);
-		ct.InsertConstraint(c);
+		ct = new ConstraintTree();
 		c.Dump();
 		
 		ct.InsertConstraint(c);

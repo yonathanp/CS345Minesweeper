@@ -1,15 +1,27 @@
+import java.util.ArrayList;
+
 
 public class ConstraintTreeNode {
 	private SortedList Equalities;
 	private IntervalList Intervals;
+	private Pattern NodePattern;
 	
 	public ConstraintTreeNode() {
 		Equalities = new SortedList();
 		Intervals = new IntervalList();
+		NodePattern = new Pattern();
 	}
-
+	
+	public ConstraintTreeNode(ArrayList<Integer> P) {
+		Equalities = new SortedList();
+		Intervals = new IntervalList();
+		NodePattern = new Pattern(P);
+	}
+	
 	public void Dump(){
-		System.out.println("Node: {Intervals:[" + Intervals.toString() + "], Equalities:[" + Equalities.GetKeySet() + "]} \t");
+		System.out.println("Node: {\nIntervals:[" + Intervals.toString() + "],\nEqualities:[" + Equalities.GetKeySet() + "],");
+		NodePattern.Dump();
+		System.out.println("\n} \t");
 		System.out.println("Children:");
 		ConstraintTreeNode[] Children = Equalities.GetVals();
 		for(ConstraintTreeNode Child : Children){
