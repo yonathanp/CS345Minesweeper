@@ -53,4 +53,28 @@ public class ConstraintTreeNode {
 	public void DeleteEqualitiesInterval(IntPair Interval){
 		Equalities.DeleteInterval(Interval.GetVal1(), Interval.GetVal2());
 	}
+	
+	public boolean IsEmpty(){
+		return Intervals.IsEmpty();
+	}
+	
+	public int GetPatternElement(int i){
+		return NodePattern.GetValue(i);
+	}
+	
+	public ArrayList<Integer> GetPatternCopy(int first, int last){
+		return NodePattern.GetValuesCopy(first, last);
+	}
+	
+	public int GetPatternLength(){
+		return NodePattern.Length();
+	}
+	
+	public ArrayList<Integer> GetFullPatternCopy(){
+		return NodePattern.GetValuesCopy(0, GetPatternLength()-1);
+	}
+	
+	public int GetIntervalsNext(int v){
+		return Intervals.Next(v);
+	}
 }

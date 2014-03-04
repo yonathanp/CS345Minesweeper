@@ -43,7 +43,7 @@ public class CDSTest {
 			System.out.println("Covers " + a + "? " + il.Covers(a));
 		}	
 		
-		ConstraintTree ct = new ConstraintTree();
+		ConstraintTree ct = new ConstraintTree(6);
 		IntPair P = new IntPair(1,4);
 		ArrayList<Integer> V = new ArrayList<Integer>();
 		V.add(Constraint.WILDCARD);
@@ -56,6 +56,7 @@ public class CDSTest {
 		
 		ct.InsertConstraint(c);
 		ct.Dump();
+		
 		P = new IntPair(4,6);
 		V = new ArrayList<Integer>();
 		V.add(3);
@@ -63,7 +64,7 @@ public class CDSTest {
 		V.add(5);
 		V.add(Constraint.WILDCARD);
 		c = new Constraint(V,P);
-		ct = new ConstraintTree();
+		ct = new ConstraintTree(4);
 		c.Dump();
 		
 		ct.InsertConstraint(c);

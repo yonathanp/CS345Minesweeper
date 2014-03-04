@@ -69,4 +69,8 @@ public class IntervalList {
 	public String toString(){
 		return Data.toString();
 	}
+	
+	public boolean IsEmpty(){
+		return Data.isEmpty();
+	}
 }

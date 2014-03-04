@@ -17,4 +17,8 @@ public class Tuple {
 	public Tuple(ArrayList<Integer> V){
 		Value = new ArrayList<Integer>(V);
 	}
+	
+	public void AddVal(int v){
+		Value.add(v);
+	}
 }

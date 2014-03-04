@@ -9,7 +9,7 @@ public class Minesweeper {
 	Minesweeper(ArrayList<Relation> Rels, ArrayList<String> AttributeOrder){
 		Relations = new ArrayList<Relation>(Rels);
 		GAO = new ArrayList<String>(AttributeOrder);
-		MyCDS = new ConstraintTree();
+		MyCDS = new ConstraintTree(GAO.size());
 	}
 	
 	Relation Join(ArrayList<Relation> Query){ return null;}

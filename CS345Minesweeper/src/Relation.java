@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-
+// Assumption: all attributes of all relations are restricted to unsigned integers only (natural numbers)
 public class Relation {
 	private ArrayList<Tuple> Data;
 	private ArrayList<String> Schema;
