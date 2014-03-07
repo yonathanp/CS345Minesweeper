@@ -17,30 +17,37 @@ public class ConstraintTree implements CDS {
 		// and u.Intervals is not empty. Ordered means: Result[i] is a specialization of Result[i+1].
 		// Note: We are assuming that the query is beta-acyclic and that the GAO is such that for each (t1,...,ti)
 		// the principle filter G(t1,...,ti) is a CHAIN - see appendix F for how to set the GAO.
-		//debug
-		p.Dump();
+		
+		//p.Dump();
 		ArrayList<ConstraintTreeNode> G = new ArrayList<ConstraintTreeNode>();
 		if(p.Length() == 0){
 			G.add(Root);
 			return G;
 		}
 		// generate pattern chain
-		ArrayList<Pattern> Chain = new ArrayList<Pattern>();
-		Chain.add(p);
-		for(int i = p.Length()-1; i >= 0; i--){
-			if(p.GetValue(i) != Constraint.WILDCARD){
-				Pattern oldHead = Chain.get(Chain.size()-1);
-				Pattern newHead = new Pattern(oldHead);
-				newHead.SetValue(i,Constraint.WILDCARD);
-				Chain.add(newHead);
+		ArrayList<Pattern> GeneralizedPatterns = new ArrayList<Pattern>();
+		Pattern P0 = new Pattern();
+		P0.AddValue(p.GetValue(0));
+		Pattern P1 = new Pattern();
+		P1.AddValue(Constraint.WILDCARD);
+		GeneralizedPatterns.add(P0);
+		GeneralizedPatterns.add(P1);
+		for(int i = 1; i < p.Length(); i++){
+			int j = GeneralizedPatterns.size();
+			for(int k = 0; k < j; k++){
+				Pattern r = new Pattern(GeneralizedPatterns.get(k));
+				r.AddValue(Constraint.WILDCARD);
+				GeneralizedPatterns.add(r);
+				GeneralizedPatterns.get(k).AddValue(p.GetValue(i));
 			}
 		}
 		// create the ordered list of nodes corresponding to patterns in Chain
-		for(Pattern q : Chain){
+		for(Pattern q : GeneralizedPatterns){
 			// follow the path encoded by q down the ConstraintTree
 			ConstraintTreeNode v = Root;
 			for(int i = 0; i < q.Length(); i++){
-				v = v.GetChild(q.GetValue(i));
+				if(v == null) { break;}
+				v = v.GetChild(q.GetValue(i)); 
 			}
 			if(v != null && !v.IsEmpty()){ G.add(v);}
 		}
@@ -66,8 +73,7 @@ public class ConstraintTree implements CDS {
 	// Algorithm 3 in paper - for beta-acyclic queries only
 	public Tuple GetProbepoint() {
 		int i = 0;
-		Tuple t = new Tuple();
-		// t.AddVal(Root.Intervals.Next(-1))
+		Tuple t = new Tuple(GAOLength);
 		while(i < GAOLength){
 			ArrayList<ConstraintTreeNode> G = PrincipalFilter(new Pattern(t.Value));
 			if(G.isEmpty()){
@@ -76,7 +82,7 @@ public class ConstraintTree implements CDS {
 			} else{
 				ConstraintTreeNode u = G.get(0);
 				int newTupleElem = NextChainVal(-1,0,G);
-				t.AddVal(newTupleElem);
+				t.AddVal(i,newTupleElem);
 				int i0 = -1;
 				for(int k = 0; k < i; k++){
 					if(u.GetPatternLength() >  0 && u.GetPatternElement(k) != Constraint.WILDCARD){ i0 = k;}
@@ -87,6 +93,7 @@ public class ConstraintTree implements CDS {
 					ArrayList<Integer> V = i0 > 0 ? u.GetPatternCopy(0,i0-1) : new ArrayList<Integer>();
 					IntPair I = new IntPair(u.GetPatternElement(i0)-1, u.GetPatternElement(i0)+1);
 					InsertConstraint(new Constraint(V,I));
+					Dump();
 					// backtrack
 					i = i0-1;
 				} else{

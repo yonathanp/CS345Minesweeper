@@ -10,6 +10,10 @@ public class Tuple {
 		Value = new ArrayList<Integer>();
 	}
 	
+	public Tuple(int Size){
+		Value = new ArrayList<Integer>(Size);
+	}
+	
 	public Tuple(Tuple T){
 		Value = new ArrayList<Integer>(T.Value);
 	}
@@ -20,5 +24,9 @@ public class Tuple {
 	
 	public void AddVal(int v){
 		Value.add(v);
+	}
+	
+	public void AddVal(int idx, int v){
+		Value.add(idx, v);
 	}
 }
