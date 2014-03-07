@@ -16,7 +16,9 @@ public class ConstraintTree implements CDS {
 		// Return ORDERED list of all constraint tree nodes u such that the pattern for node u is a generalization of p
 		// and u.Intervals is not empty. Ordered means: Result[i] is a specialization of Result[i+1].
 		// Note: We are assuming that the query is beta-acyclic and that the GAO is such that for each (t1,...,ti)
-		// the principle filter G(t1,...,ti) is a chain - see appendix F for how to set the GAO.
+		// the principle filter G(t1,...,ti) is a CHAIN - see appendix F for how to set the GAO.
+		//debug
+		p.Dump();
 		ArrayList<ConstraintTreeNode> G = new ArrayList<ConstraintTreeNode>();
 		if(p.Length() == 0){
 			G.add(Root);
@@ -40,7 +42,7 @@ public class ConstraintTree implements CDS {
 			for(int i = 0; i < q.Length(); i++){
 				v = v.GetChild(q.GetValue(i));
 			}
-			if(!v.IsEmpty()){ G.add(v);}
+			if(v != null && !v.IsEmpty()){ G.add(v);}
 		}
 		return G;
 	}
@@ -76,8 +78,8 @@ public class ConstraintTree implements CDS {
 				int newTupleElem = NextChainVal(-1,0,G);
 				t.AddVal(newTupleElem);
 				int i0 = -1;
-				for(int k = 0; k <= i; k++){
-					if(u.GetPatternElement(k) != Constraint.WILDCARD){ i0 = k;}
+				for(int k = 0; k < i; k++){
+					if(u.GetPatternLength() >  0 && u.GetPatternElement(k) != Constraint.WILDCARD){ i0 = k;}
 				}
 				if(newTupleElem == Integer.MAX_VALUE){
 					if(i0 < 0){ return null;}
@@ -120,6 +122,7 @@ public class ConstraintTree implements CDS {
 	public int NextChainVal(){return 0;}
 	
 	public void Dump(){
+		System.out.print("\n");
 		Root.Dump();
 	}
 	

@@ -65,6 +65,6 @@ public class Pattern {
 				System.out.print( Values.get(i) + ",");
 			}
 		}
-		System.out.print("]");
+		System.out.print("]\n");
 	}
 }

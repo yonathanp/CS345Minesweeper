@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 
 public class Constraint {
-	public final static Integer WILDCARD = -1;
+	public final static Integer WILDCARD = -2;
 	private int IntervalComponentIndex;
 	private IntPair Interval;
 	private ArrayList<Integer> Values;
