@@ -93,14 +93,16 @@ public class ConstraintTree implements CDS {
 					ArrayList<Integer> V = i0 > 0 ? u.GetPatternCopy(0,i0-1) : new ArrayList<Integer>();
 					IntPair I = new IntPair(u.GetPatternElement(i0)-1, u.GetPatternElement(i0)+1);
 					InsertConstraint(new Constraint(V,I));
-					Dump();
+					//Dump();
 					// backtrack
-					i = i0-1;
+					i = i0;
+					t.Truncate(i0);
 				} else{
 					i++;
 				}
 			}
 		}
+		t.Truncate(GAOLength);
 		return t;
 	}
 

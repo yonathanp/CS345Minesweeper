@@ -48,7 +48,7 @@ public class Pattern {
 	// return a copy of the pattern's values array, as indicated by the inclusive indices first & last
 	public ArrayList<Integer> GetValuesCopy(int first, int last){
 		ArrayList<Integer> V = new ArrayList<Integer>(last - first + 1);
-		for(int i = first; i < last; i++){
+		for(int i = first; i <= last; i++){
 			V.add(Values.get(first + i));
 		}
 		return V;

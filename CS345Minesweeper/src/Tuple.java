@@ -29,4 +29,10 @@ public class Tuple {
 	public void AddVal(int idx, int v){
 		Value.add(idx, v);
 	}
+	
+	public void Truncate(int L){
+		while(Value.size() > L){
+			Value.remove(Value.size()-1);
+		}
+	}
 }
