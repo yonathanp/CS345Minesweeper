@@ -18,6 +18,10 @@ public class Relation {
 		Schema = new ArrayList<String>(S);
 	}
 	
+	public ArrayList<String> GetSchema(){
+		return Schema;
+	}
+	
 	public void SetAttributeOrder(ArrayList<Integer> AO){
 		AttributeOrder = new ArrayList<Integer>(AO);
 	}
@@ -38,6 +42,14 @@ public class Relation {
 		return new Tuple(Data.get(Idx));
 	}
 	
+	public Integer GetField(int Idx, String Column){
+		return GetTuple(Idx).GetAttrVal(Schema.indexOf(Column));
+	}
+	
+	public Integer GetField(Tuple t, String Column){
+		return t.GetAttrVal(Schema.indexOf(Column));
+	}
+
 	public void CreateIndex(){
 		I = new Index(this);
 	}
