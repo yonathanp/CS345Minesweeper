@@ -32,13 +32,21 @@ public class Relation {
 		}
 		BufferedReader BR = new BufferedReader(new InputStreamReader(IS, Charset.forName("UTF-8")));
 		String line;
-		while ((line = BR.readLine()) != null){
-			String[] values = line.split(",");
-			Tuple T = new Tuple();
-			for ( int i = 0; i<values.length; i++){
-				int v = Integer.parseInt(values[i]);
-				T.AddVal(v);
+		try {
+			while ((line = BR.readLine()) != null){
+				String[] values = line.split(",");
+				Tuple T = new Tuple();
+				for ( int i = 0; i<values.length; i++){
+					int v = Integer.parseInt(values[i]);
+					T.AddVal(v);
+				}
 			}
+		} catch (NumberFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		try {
 			BR.close();
@@ -96,5 +104,9 @@ public class Relation {
 			GetTuple(i).Dump();
 		}
 		System.out.print("\n");
+	}
+
+	public int GetArity(){
+		return Schema.size();
 	}
 }
