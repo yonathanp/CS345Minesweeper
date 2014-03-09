@@ -1,3 +1,10 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 // Assumption: all attributes of all relations are restricted to unsigned integers only (natural numbers)
@@ -12,7 +19,36 @@ public class Relation {
 	}
 	// TODO: builders for Relation class from input files
 	public Relation(String InFileName){}  // implement a constructor for every input file format we want to support
-	public Relation(ArrayList<String> Schema, String InFileName){}  // implement a constructor for every input file format we want to support
+	
+	public Relation(ArrayList<String> Schema, String InFileName){
+		Data = new ArrayList<Tuple>();
+		SetSchema(Schema);
+		InputStream IS = null;
+		try {
+			IS = new FileInputStream(InFileName);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BufferedReader BR = new BufferedReader(new InputStreamReader(IS, Charset.forName("UTF-8")));
+		String line;
+		while ((line = BR.readLine()) != null){
+			String[] values = line.split(",");
+			Tuple T = new Tuple();
+			for ( int i = 0; i<values.length; i++){
+				int v = Integer.parseInt(values[i]);
+				T.AddVal(v);
+			}
+		}
+		try {
+			BR.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BR = null;
+		IS = null;
+	}  // implement a constructor for every input file format we want to support
 	
 	public void SetSchema(ArrayList<String> S){
 		Schema = new ArrayList<String>(S);
