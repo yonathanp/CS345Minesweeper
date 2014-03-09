@@ -53,4 +53,12 @@ public class Relation {
 	public void CreateIndex(){
 		I = new Index(this);
 	}
+	 
+	public void Dump(){
+		System.out.print("Relation:\n");
+		for ( int i = 0; i < GetSize(); i++){
+			GetTuple(i).Dump();
+		}
+		System.out.print("\n");
+	}
 }

@@ -17,6 +17,10 @@ public class HashIndex {
 				Key.add(R.GetField(i, Field));
 			}
 			ArrayList<Tuple> Bucket = this.Data.get(Key);
+			if (Bucket == null){
+				Bucket = new ArrayList<Tuple>();
+			}
+
 			Bucket.add(R.GetTuple(i));
 			this.Data.put(Key,Bucket);
 		}
@@ -25,5 +29,4 @@ public class HashIndex {
 	public ArrayList<Tuple> GetTuples(ArrayList<Integer> Key){
 		return Data.get(Key);
 	}
-	
 }

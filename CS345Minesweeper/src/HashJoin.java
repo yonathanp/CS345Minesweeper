@@ -21,11 +21,14 @@ public class HashJoin {
 		}
 		
 		JoinAttributes = new ArrayList<String>(R1.GetSchema());
+
 		for ( int i = 0; i < JoinAttributes.size(); i++){
-			if (!R1.GetSchema().contains(JoinAttributes.get(i))){
+			if (!R2.GetSchema().contains(JoinAttributes.get(i))){
 				JoinAttributes.remove(i);
+				i--;
 			}
 		}
+		
 	}
 	
 	public void Join(){
@@ -39,6 +42,9 @@ public class HashJoin {
 				Key.add(R2.GetField(i, Field));
 			}
 			ArrayList<Tuple> Candidates = Index.GetTuples(Key);
+			if (Candidates == null){
+				continue;
+			}
 			for ( int j=0; j<Candidates.size(); j++){
 				Tuple t1 = Candidates.get(j);
 				Tuple OutputTuple = new Tuple();

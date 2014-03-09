@@ -35,4 +35,12 @@ public class Tuple {
 			Value.remove(Value.size()-1);
 		}
 	}
+	
+	public void Dump(){
+		System.out.print("(");
+		for ( int i =0; i< Value.size(); i++){
+			System.out.print(Value.get(i) + ",");
+		}
+		System.out.print(")\n");
+	}
 }
