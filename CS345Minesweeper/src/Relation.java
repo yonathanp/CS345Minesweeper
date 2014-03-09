@@ -20,7 +20,7 @@ public class Relation {
 	// TODO: builders for Relation class from input files
 	public Relation(String InFileName){}  // implement a constructor for every input file format we want to support
 	
-	public Relation(ArrayList<String> Schema, String InFileName){
+	public Relation(ArrayList<String> Schema, String InFileName) throws NumberFormatException, IOException{
 		Data = new ArrayList<Tuple>();
 		SetSchema(Schema);
 		InputStream IS = null;
@@ -33,12 +33,13 @@ public class Relation {
 		BufferedReader BR = new BufferedReader(new InputStreamReader(IS, Charset.forName("UTF-8")));
 		String line;
 		while ((line = BR.readLine()) != null){
-			String[] values = line.split(",");
+			String[] values = line.split(" ");
 			Tuple T = new Tuple();
 			for ( int i = 0; i<values.length; i++){
 				int v = Integer.parseInt(values[i]);
 				T.AddVal(v);
 			}
+			AddTuple(T);
 		}
 		try {
 			BR.close();
