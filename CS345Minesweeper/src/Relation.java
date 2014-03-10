@@ -11,12 +11,18 @@ import java.util.ArrayList;
 public class Relation {
 	private ArrayList<Tuple> Data;
 	private ArrayList<String> Schema;
+	// specifies the order of the attributes according to the Global attribute order
 	private ArrayList<Integer> AttributeOrder;
 	private Index I;
 
 	public Relation(){
 		Data = new ArrayList<Tuple>();
 	}
+	
+	public Relation(ArrayList<Tuple> D){
+		Data = D;
+	}
+	
 	// TODO: builders for Relation class from input files
 	public Relation(String InFileName){}  // implement a constructor for every input file format we want to support
 
@@ -79,11 +85,11 @@ public class Relation {
 		return new Tuple(Data.get(Idx));
 	}
 
-	public Integer GetField(int Idx, String Column){
+	public int GetField(int Idx, String Column){
 		return GetTuple(Idx).GetAttrVal(Schema.indexOf(Column));
 	}
 
-	public Integer GetField(Tuple t, String Column){
+	public int GetField(Tuple t, String Column){
 		return t.GetAttrVal(Schema.indexOf(Column));
 	}
 
@@ -97,5 +103,19 @@ public class Relation {
 			GetTuple(i).Dump();
 		}
 		System.out.print("\n");
+	}
+	
+	public int GetArity(){
+		return Schema.size();
+	}
+	
+	public IntPair FindGap(ArrayList<Integer> IndexTuple, int a){
+		if(I == null){ return null;}
+		return I.FindGap(IndexTuple, a);
+	}
+	
+	public Tuple RetrieveIndexTuple(ArrayList<Integer> IndexTuple){
+		if(I == null){ return null;}
+		return GetTuple(I.RetrieveIndexTupleId(IndexTuple));
 	}
 }

@@ -70,7 +70,7 @@ public class Index {
 	// retrieve relation value for an index tuple (a tuple of POSITIVE integers of arity <= Index.Height)
 	// Example: for (1,2) find the record with the second smallest
 	// value of A2 among the records with the smallest value of A1
-	public int RetrieveIndexTuple(ArrayList<Integer> IndexTuple){
+	public int RetrieveIndexTupleId(ArrayList<Integer> IndexTuple){
 		if(IndexTuple.size() > Height){ return -1;}
 		IndexNode CurrNode = Root;
 		for(int i = 0; i < IndexTuple.size(); i++){
@@ -89,7 +89,7 @@ public class Index {
 			if(IndexTuple.get(i) > CurrNode.GetSize()){ return null;}
 			CurrNode = CurrNode.GetChild(IndexTuple.get(i)-1);
 		}
-		System.out.println(CurrNode.GetId());
+		//System.out.println(CurrNode.GetId());
 		return CurrNode.FindKey(a);
 	}
 	

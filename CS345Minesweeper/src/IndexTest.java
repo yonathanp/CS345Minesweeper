@@ -40,9 +40,9 @@ public class IndexTest {
 		V1.set(2,2);
 		System.out.println("Is tuple (1,2,2) there ? " + I.Search(new Tuple(V1),AO));	// should be -1
 		V1.set(2,1);
-		System.out.println("Key matching index tuple (1,2,1): " + I.RetrieveIndexTuple(V1));  // should be -1
+		System.out.println("Key matching index tuple (1,2,1): " + I.RetrieveIndexTupleId(V1));  // should be -1
 		V1.set(0,2);
-		System.out.println("Key matching index tuple (2,2,1): " + I.RetrieveIndexTuple(V1));  // should be 1
+		System.out.println("Key matching index tuple (2,2,1): " + I.RetrieveIndexTupleId(V1));  // should be 1
 		ArrayList<Integer> U = new ArrayList<Integer>();
 		U.add(2);
 		U.add(2);
