@@ -62,6 +62,7 @@ public class HashJoinTest {
 		
 		R2.Dump();
 		HashJoin H = new HashJoin(R1, R2, GAO);
+		H.CreateIndex();
 		H.Join();
 		Iterator<Tuple> i = H.Output.iterator();
 		Tuple t = i.next();

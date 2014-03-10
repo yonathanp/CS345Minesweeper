@@ -4,6 +4,7 @@ import java.util.HashSet;
 public class HashJoin {
 	Relation R1;
 	Relation R2;
+	HashIndex R1Index;
 	ArrayList<String> JoinAttributes;
 	ArrayList<String> GAO;
 	HashSet<Tuple> Output;
@@ -30,10 +31,12 @@ public class HashJoin {
 		}
 		
 	}
+	public void CreateIndex(){
+		R1Index = new HashIndex(R1, JoinAttributes);
+	}
 	
 	public void Join(){
 		Output = new HashSet<Tuple>();
-		HashIndex Index = new HashIndex(R1, JoinAttributes);
 		for( int i =0; i< R2.GetSize(); i++){
 			Tuple t2 = R2.GetTuple(i);
 			ArrayList<Integer> Key = new ArrayList<Integer>();
@@ -41,7 +44,7 @@ public class HashJoin {
 				String Field = JoinAttributes.get(j);
 				Key.add(R2.GetField(i, Field));
 			}
-			ArrayList<Tuple> Candidates = Index.GetTuples(Key);
+			ArrayList<Tuple> Candidates = R1Index.GetTuples(Key);
 			if (Candidates == null){
 				continue;
 			}
