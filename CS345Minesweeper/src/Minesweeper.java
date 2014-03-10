@@ -59,6 +59,7 @@ public class Minesweeper {
 				MyCDS.InsertConstraint(new Constraint(V,I));
 			} else{
 				for(int r = 0; r < Query.size(); r++){
+					// TODO: Range Inspection and Constraint Insertion - lines 19-20
 				}
 			}
 		}
