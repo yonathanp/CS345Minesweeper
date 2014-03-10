@@ -4,13 +4,31 @@ import java.util.ArrayList;
 public class Minesweeper {
 	ArrayList<Relation> Relations;
 	ArrayList<String> GAO;
+	//GAOIds[r][a] = for relation r: index of the a-th attribute of the relation (according to global order, not relation's schema) in the GAO
+	ArrayList<ArrayList<Integer>> GAOIds; 
 	CDS MyCDS;
 	
 	Minesweeper(ArrayList<Relation> Rels, ArrayList<String> AttributeOrder){
 		Relations = new ArrayList<Relation>(Rels);
 		GAO = new ArrayList<String>(AttributeOrder);
-		// TODO: set attribute order for all relations in query
 		MyCDS = new ConstraintTree(GAO.size());
+		GAOIds = new ArrayList<ArrayList<Integer>>(Relations.size());
+		for(int r = 0; r < Relations.size(); r++){
+			GAOIds.add(new ArrayList<Integer>());
+		}
+		// populate the attribute order array of each relation according to the GAO
+		for(int r = 0; r < Relations.size(); r++){
+			Relation R = Relations.get(r);
+			ArrayList<Integer> AttrOrder = new ArrayList<Integer>();
+			for(int a = 0; a < GAO.size(); a++){
+				int AttrId = R.GetAttributeId(GAO.get(a));
+				if(AttrId >= 0){ 
+					AttrOrder.add(AttrId);
+					GAOIds.get(r).add(a);
+				}
+			}
+			R.SetAttributeOrder(AttrOrder);
+		}
 	}
 	
 	// Algorithm 2 in paper
@@ -18,11 +36,12 @@ public class Minesweeper {
 		ArrayList<Tuple> Output = new ArrayList<Tuple>();
 		Tuple t;
 		while((t = MyCDS.GetProbepoint()) != null){
+			t.Dump();
 			boolean OutputTupleFlag  = true;
 			// loop lines 7-10
 			// RIndices = Indices[r]: tuple indices for relation Query[r]
 			// RIndices[i] : the i-th index tuple in the count {[i(l)],[i(r)],[i(l),i(ll)],[i(l),i(lh)],[i(h),i(hl)],[i(h),i(hh)],...}
-			ArrayList<ArrayList<ArrayList<Integer>>> Indices = new ArrayList<ArrayList<ArrayList<Integer>>>();
+			ArrayList<ArrayList<ArrayList<Integer>>> Indices = new ArrayList<ArrayList<ArrayList<Integer>>>(Query.size());
 			for(int r = 0;  r < Query.size(); r++){
 				ArrayList<ArrayList<Integer>> RIndices = new ArrayList<ArrayList<Integer>>();
 				Relation R = Query.get(r);
@@ -35,14 +54,18 @@ public class Minesweeper {
 				for(int p = 0; p < k; p++){
 					int CurrAttrIdx = AttrOrder.get(p);
 					for(int i = s; i < e; i++){
-						IntPair Gap = R.FindGap(RIndices.get(i), t.GetAttrVal(CurrAttrIdx));
+						IntPair Gap = R.FindGap(RIndices.get(i), t.GetAttrVal(GAOIds.get(r).get(p)));  
 						ArrayList<Integer> IL = new ArrayList<Integer>(RIndices.get(i));
 						IL.add(Gap.GetVal1());
 						RIndices.add(IL);
 						ArrayList<Integer> IH = new ArrayList<Integer>(RIndices.get(i));
 						IH.add(Gap.GetVal2());
 						RIndices.add(IH);
-						OutputTupleFlag = OutputTupleFlag && (R.RetrieveIndexTuple(IH).GetAttrVal(CurrAttrIdx) == t.GetAttrVal(CurrAttrIdx));
+						if(R.RetrieveIndexTuple(IH) == null){ 
+							OutputTupleFlag = false;
+						} else{
+							OutputTupleFlag = OutputTupleFlag && (R.RetrieveIndexTuple(IH).GetAttrVal(CurrAttrIdx) == t.GetAttrVal(GAOIds.get(r).get(p)));
+						}	
 						cnt += 2;
 					}
 					s += cnt;
@@ -59,7 +82,29 @@ public class Minesweeper {
 				MyCDS.InsertConstraint(new Constraint(V,I));
 			} else{
 				for(int r = 0; r < Query.size(); r++){
-					// TODO: Range Inspection and Constraint Insertion - lines 19-20
+					Relation R = Query.get(r);
+					ArrayList<ArrayList<Integer>> RIndices = Indices.get(r);
+					for(int i = 1; i < RIndices.size(); i+=2){
+						ArrayList<Integer> V = new ArrayList<Integer>(RIndices.get(i));
+						V.remove(V.size()-1);
+						if(R.IndexTupleInRange(V)){
+							Tuple tb = R.RetrieveIndexTuple(V);
+							Tuple tl = R.RetrieveIndexTuple(RIndices.get(i));
+							Tuple th = R.RetrieveIndexTuple(RIndices.get(i+1));
+							// construct appropriate constraint
+							ArrayList<Integer> CV = new ArrayList<Integer>();
+							for(int j = 0; j < V.size(); j++){
+								int NextAttrIdx = GAOIds.get(r).get(j);
+								while(CV.size() < NextAttrIdx){
+									CV.add(Constraint.WILDCARD);
+								}
+								CV.add(tb.GetAttrVal(NextAttrIdx));
+							}
+							int lval = (tl == null) ? Integer.MIN_VALUE : tl.GetAttrVal(GAOIds.get(r).get(V.size()));
+							int hval = (th == null) ? Integer.MAX_VALUE : th.GetAttrVal(GAOIds.get(r).get(V.size()));
+							MyCDS.InsertConstraint(new Constraint(CV,new IntPair(lval, hval)));
+						}
+					}
 				}
 			}
 		}

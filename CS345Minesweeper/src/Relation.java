@@ -11,8 +11,12 @@ import java.util.ArrayList;
 public class Relation {
 	private ArrayList<Tuple> Data;
 	private ArrayList<String> Schema;
-	// specifies the order of the attributes according to the Global attribute order
+	// specifies the order of the relation's attributes according to the Global attribute order
+	// for instance for R(A,B,C) where the GAO is W,A,X,C,B, AttributeOrder will be [0,2,1]
 	private ArrayList<Integer> AttributeOrder;
+	// AttributeGAOId[i] = index in GAO of schema attribute i. 
+	// for instance for R(A,B,C) where the GAO is W,A,X,C,B, AttributeGAOId will be [1,4,3]
+	//private ArrayList<Integer> AttributeGAOId;
 	private Index I;
 
 	public Relation(){
@@ -99,6 +103,10 @@ public class Relation {
 
 	public void Dump(){
 		System.out.print("Relation:\n");
+		if(Schema != null){ System.out.println("Schema: " + Schema.toString());}
+		if(AttributeOrder != null){ System.out.println("AttributeOrder: " + AttributeOrder.toString());}
+		//if(AttributeGAOId != null){ System.out.println("AttributeGAOIds: " + AttributeGAOId.toString());}
+		System.out.println("Data:");
 		for ( int i = 0; i < GetSize(); i++){
 			GetTuple(i).Dump();
 		}
@@ -116,6 +124,18 @@ public class Relation {
 	
 	public Tuple RetrieveIndexTuple(ArrayList<Integer> IndexTuple){
 		if(I == null){ return null;}
-		return GetTuple(I.RetrieveIndexTupleId(IndexTuple));
+		int TupleId = I.RetrieveIndexTupleId(IndexTuple);
+		return (TupleId >= 0) ? GetTuple(TupleId) : null;
+	}
+	
+	public int GetAttributeId(String Attr){
+		for(int i = 0; i < Schema.size(); i++){
+			if(Attr.equals(Schema.get(i))){ return i;}
+		}
+		return -1;
+	}
+	
+	public boolean IndexTupleInRange(ArrayList<Integer> IndexTuple){
+		return I.IsInRange(IndexTuple);
 	}
 }

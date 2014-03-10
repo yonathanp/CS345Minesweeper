@@ -74,11 +74,16 @@ public class Index {
 		if(IndexTuple.size() > Height){ return -1;}
 		IndexNode CurrNode = Root;
 		for(int i = 0; i < IndexTuple.size(); i++){
-			if(IndexTuple.get(i) > CurrNode.GetSize()){ return -1;}
+			if(IndexTuple.get(i) > CurrNode.GetSize() || IndexTuple.get(i) < 1){ return -1;}	// out-of-range
 			if(i == IndexTuple.size()-1){ return CurrNode.GetRecordId(IndexTuple.get(i)-1);}
 			CurrNode = CurrNode.GetChild(IndexTuple.get(i)-1);
 		}
 		return -1; // should never reach here
+	}
+	
+	public boolean IsInRange(ArrayList<Integer> IndexTuple){
+		if(IndexTuple.isEmpty()){ return true;}
+		return (RetrieveIndexTupleId(IndexTuple) >= 0);
 	}
 	
 	// see description in page 3
@@ -86,7 +91,7 @@ public class Index {
 		if(IndexTuple.size() > Height-1){ return null;}
 		IndexNode CurrNode = Root;
 		for(int i = 0; i < IndexTuple.size(); i++){
-			if(IndexTuple.get(i) > CurrNode.GetSize()){ return null;}
+			if(IndexTuple.get(i) > CurrNode.GetSize() || IndexTuple.get(i) < 1){ return null;}	// out-of-range
 			CurrNode = CurrNode.GetChild(IndexTuple.get(i)-1);
 		}
 		//System.out.println(CurrNode.GetId());
