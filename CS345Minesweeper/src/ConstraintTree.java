@@ -64,7 +64,8 @@ public class ConstraintTree implements CDS {
 			z = NextChainVal(y, NodeIdx+1, G);
 			y = u.GetIntervalsNext(z);
 		}while(y != z);
-		Constraint C = new Constraint(u.GetFullPatternCopy(),new IntPair(startValue-1, y));
+		IntPair I = startValue > 0 ? new IntPair(startValue-1, y) : new IntPair(Integer.MIN_VALUE, y);
+		if(I.GetVal1() != I.GetVal2()){ InsertConstraint(new Constraint(u.GetFullPatternCopy(),I));}
 		return y;
 	}
 	
@@ -72,6 +73,7 @@ public class ConstraintTree implements CDS {
 	@Override
 	// Algorithm 3 in paper - for beta-acyclic queries only
 	public Tuple GetProbepoint() {
+		//Dump();
 		int i = 0;
 		Tuple t = new Tuple(GAOLength);
 		while(i < GAOLength){
@@ -109,6 +111,7 @@ public class ConstraintTree implements CDS {
 
 	@Override
 	public void InsertConstraint(Constraint C) {
+		C.Dump();
 		// Algorithm 5 in paper
 		ConstraintTreeNode v = Root;
 		ArrayList<Integer> pattern = new ArrayList<Integer>();

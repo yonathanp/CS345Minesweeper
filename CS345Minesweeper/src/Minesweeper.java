@@ -28,6 +28,7 @@ public class Minesweeper {
 				}
 			}
 			R.SetAttributeOrder(AttrOrder);
+			R.CreateIndex();
 		}
 	}
 	
@@ -55,6 +56,7 @@ public class Minesweeper {
 					int CurrAttrIdx = AttrOrder.get(p);
 					for(int i = s; i < e; i++){
 						IntPair Gap = R.FindGap(RIndices.get(i), t.GetAttrVal(GAOIds.get(r).get(p)));  
+						if(Gap == null){ continue;}	// Coordinates of index tuple are out-of-range
 						ArrayList<Integer> IL = new ArrayList<Integer>(RIndices.get(i));
 						IL.add(Gap.GetVal1());
 						RIndices.add(IL);
@@ -68,9 +70,10 @@ public class Minesweeper {
 						}	
 						cnt += 2;
 					}
-					s += cnt;
+					s = e;
 					e += cnt;
 				}
+				//System.out.println("Relation " + r + " RIndices: " + RIndices.toString());
 				Indices.add(RIndices);
 			}
 			
@@ -93,16 +96,25 @@ public class Minesweeper {
 							Tuple th = R.RetrieveIndexTuple(RIndices.get(i+1));
 							// construct appropriate constraint
 							ArrayList<Integer> CV = new ArrayList<Integer>();
-							for(int j = 0; j < V.size(); j++){
+							for(int j = 0; j <= V.size(); j++){
 								int NextAttrIdx = GAOIds.get(r).get(j);
 								while(CV.size() < NextAttrIdx){
 									CV.add(Constraint.WILDCARD);
 								}
-								CV.add(tb.GetAttrVal(NextAttrIdx));
+								if(j < V.size()){ CV.add(tb.GetAttrVal(NextAttrIdx));}
 							}
-							int lval = (tl == null) ? Integer.MIN_VALUE : tl.GetAttrVal(GAOIds.get(r).get(V.size()));
-							int hval = (th == null) ? Integer.MAX_VALUE : th.GetAttrVal(GAOIds.get(r).get(V.size()));
-							MyCDS.InsertConstraint(new Constraint(CV,new IntPair(lval, hval)));
+							//System.out.println("tl:");
+							//if(tl != null){tl.Dump();}
+							int lval = (tl == null) ? Integer.MIN_VALUE : tl.GetAttrVal(Query.get(r).GetAttributeOrder().get(V.size()));
+							//System.out.println("th:");
+							//if(th != null){th.Dump();}
+							int hval = (th == null) ? Integer.MAX_VALUE : th.GetAttrVal(Query.get(r).GetAttributeOrder().get(V.size()));
+							if(hval != lval){
+								Constraint C = new Constraint(CV,new IntPair(lval, hval));
+								//System.out.println("\nRelation " + r); MyCDS.Dump();
+								MyCDS.InsertConstraint(C);
+								//System.out.print("\n");C.Dump(); MyCDS.Dump(); System.out.println("------------------------");
+							}
 						}
 					}
 				}
