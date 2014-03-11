@@ -35,7 +35,7 @@ public class HashJoin {
 		R1Index = new HashIndex(R1, JoinAttributes);
 	}
 	
-	public void Join(){
+	public HashSet<Tuple> Join(){
 		Output = new HashSet<Tuple>();
 		for( int i =0; i< R2.GetSize(); i++){
 			Tuple t2 = R2.GetTuple(i);
@@ -62,5 +62,6 @@ public class HashJoin {
 				Output.add(OutputTuple);
 			}
 		}
+	return Output;
 	}
 }

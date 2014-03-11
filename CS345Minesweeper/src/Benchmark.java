@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 public class Benchmark {
@@ -19,12 +20,22 @@ public class Benchmark {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		ArrayList<Integer> AO1 = new ArrayList<Integer>();
+		AO1.add(0);
+		AO1.add(1);
+		
+		ArrayList<Integer> AO2 = new ArrayList<Integer>();
+		AO2.add(0);
+		AO2.add(1);
+		
+		R1.SetAttributeOrder(AO1);
+		R2.SetAttributeOrder(AO2);
 		long startTime = System.nanoTime();
 		R1.CreateIndex();
 		R2.CreateIndex();
 		long endTime = System.nanoTime();
 		
-		System.out.println("Minesweeper Index Creation: " + (endTime - startTime));
+		System.out.println("Minesweeper Index Creation: " + (endTime - startTime)/1000000000.0);
 		
 		ArrayList<String> GAO = new ArrayList<String>();
 		GAO.add("A");
@@ -36,10 +47,15 @@ public class Benchmark {
 		Minesweeper m = new Minesweeper(Relations, GAO);
 		
 		startTime = System.nanoTime();
-		m.Join(Relations);
+		Relation MO = m.Join(Relations);
 		endTime = System.nanoTime();
+		HashSet<Tuple> MineOut = new HashSet<Tuple>();
+		for( int i =0; i< MO.GetSize(); i++){
+			Tuple t2 = MO.GetTuple(i);
+			MineOut.add(t2);
+		}
 		
-		System.out.println("Minesweeper Join: " + (endTime - startTime));
+		System.out.println("Minesweeper Join: " + (endTime - startTime)/1000000000.0);
 		
 		HashJoin H = new HashJoin(R1, R2, GAO);
 		
@@ -47,14 +63,19 @@ public class Benchmark {
 		H.CreateIndex();
 		endTime = System.nanoTime();
 		
-		System.out.println("Hash Index Creation: " + (endTime - startTime));
+		System.out.println("Hash Index Creation: " + (endTime - startTime)/1000000000.0);
 
 		startTime = System.nanoTime();
-		H.Join();
+		HashSet<Tuple> HashOut = H.Join();
 		endTime = System.nanoTime();
 		
-		System.out.println("Hash Join: " + (endTime - startTime));
+		System.out.println("Hash Join: " + (endTime - startTime)/1000000000.0);
 
+		System.out.println(MineOut.equals(HashOut));
+		System.out.println(MineOut.toString());
+		System.out.println("-----------------------_");
+		System.out.println(HashOut.toString());
+		
 		//TODO: compare output of hash and minesweeper join to make sure they are identical
 	}
 

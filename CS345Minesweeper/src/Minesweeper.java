@@ -37,7 +37,8 @@ public class Minesweeper {
 		ArrayList<Tuple> Output = new ArrayList<Tuple>();
 		Tuple t;
 		while((t = MyCDS.GetProbepoint()) != null){
-			t.Dump();
+			// MyCDS.Dump();
+			// t.Dump();
 			boolean OutputTupleFlag  = true;
 			// RIndices = Indices[r]: tuple indices for relation Query[r]
 			// RIndices[i] : the i-th index tuple in the count {[i(l)],[i(r)],[i(l),i(ll)],[i(l),i(lh)],[i(h),i(hl)],[i(h),i(hh)],...}
@@ -112,6 +113,7 @@ public class Minesweeper {
 								Constraint C = new Constraint(CV,new IntPair(lval, hval));
 								//System.out.println("\nRelation " + r); MyCDS.Dump();
 								MyCDS.InsertConstraint(C);
+								// MyCDS.Dump();
 								//System.out.print("\n");C.Dump(); MyCDS.Dump(); System.out.println("------------------------");
 							}
 						}
