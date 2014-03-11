@@ -39,7 +39,6 @@ public class Minesweeper {
 		while((t = MyCDS.GetProbepoint()) != null){
 			t.Dump();
 			boolean OutputTupleFlag  = true;
-			// loop lines 7-10
 			// RIndices = Indices[r]: tuple indices for relation Query[r]
 			// RIndices[i] : the i-th index tuple in the count {[i(l)],[i(r)],[i(l),i(ll)],[i(l),i(lh)],[i(h),i(hl)],[i(h),i(hh)],...}
 			ArrayList<ArrayList<ArrayList<Integer>>> Indices = new ArrayList<ArrayList<ArrayList<Integer>>>(Query.size());

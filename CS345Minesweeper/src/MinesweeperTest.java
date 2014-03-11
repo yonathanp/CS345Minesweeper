@@ -72,7 +72,7 @@ public class MinesweeperTest {
 		Relation R = GenerateListRelation(VR, N, SR);
 		Relation S = GenerateTwoAttrRelation(VS, N*N, SS);
 		Relation T = GenerateTwoAttrRelation(VT, 2, ST);
-		Relation U = GenerateListRelation(VU, 1, SU);
+		Relation U = GenerateListRelation(VU, 2, SU);
 		ArrayList<Relation> Rels = new ArrayList<Relation>();
 		Rels.add(R);
 		Rels.add(S);
