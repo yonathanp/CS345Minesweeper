@@ -111,7 +111,7 @@ public class ConstraintTree implements CDS {
 
 	@Override
 	public void InsertConstraint(Constraint C) {
-		// C.Dump();
+		//C.Dump();
 		// Algorithm 5 in paper
 		ConstraintTreeNode v = Root;
 		ArrayList<Integer> pattern = new ArrayList<Integer>();
@@ -129,9 +129,6 @@ public class ConstraintTree implements CDS {
 		v.InsertInterval(Interval);
 		v.DeleteEqualitiesInterval(Interval);
 	}
-	
-	
-	public int NextChainVal(){return 0;}
 	
 	public void Dump(){
 		System.out.print("\n");

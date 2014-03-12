@@ -5,7 +5,7 @@ public class MinesweeperTest {
 
 	public static void main(String[] args) {
 		// Example 1: List Intersection
-		
+		/*
 		ArrayList<String> S = new ArrayList<String>();
 		S.add("A");
 		int[] V1 = {1,2,4,6,7,8};
@@ -20,7 +20,7 @@ public class MinesweeperTest {
 		Rels.add(R3);
 		Minesweeper MS = new Minesweeper(Rels, S);
 		MS.Join(Rels).Dump();
-		
+		*/
 		
 		// Example: Bow-Tie Query
 		/*
@@ -46,7 +46,7 @@ public class MinesweeperTest {
 		*/
 		
 		// Example from Appendix D1
-		/*
+		
 		ArrayList<String> SR = new ArrayList<String>();
 		ArrayList<String> SS = new ArrayList<String>();
 		ArrayList<String> ST = new ArrayList<String>();
@@ -85,7 +85,6 @@ public class MinesweeperTest {
 		Schema.add("A3");
 		Minesweeper MS = new Minesweeper(Rels, Schema);
 		MS.Join(Rels).Dump();
-		*/
 	}
 	
 	private static Relation GenerateListRelation(int[] Values, int L, ArrayList<String> S){

@@ -36,6 +36,7 @@ public class Benchmark {
 		long endTime = System.nanoTime();
 		
 		System.out.println("Minesweeper Index Creation: " + (endTime - startTime)/1000000000.0);
+		R1.Dump();R2.Dump();
 		
 		ArrayList<String> GAO = new ArrayList<String>();
 		GAO.add("A");
@@ -71,11 +72,18 @@ public class Benchmark {
 		
 		System.out.println("Hash Join: " + (endTime - startTime)/1000000000.0);
 
-		System.out.println(MineOut.equals(HashOut));
-		System.out.println(MineOut.toString());
+		//System.out.println(MineOut.equals(HashOut));
+		//System.out.println(MineOut.toString());
+		System.out.println("Minesweeper Out:");
+		for(Tuple t : MineOut){
+			t.Dump();
+		}
 		System.out.println("-----------------------_");
-		System.out.println(HashOut.toString());
-		
+		//System.out.println(HashOut.toString());
+		System.out.println("Hash-Join Out:");
+		for(Tuple t : HashOut){
+			t.Dump();
+		}
 		//TODO: compare output of hash and minesweeper join to make sure they are identical
 	}
 
