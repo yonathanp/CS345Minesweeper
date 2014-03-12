@@ -6,7 +6,7 @@ public class KPath {
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// TODO Auto-generated method stub
-		Integer K = 3;
+		Integer K = 2;
 		ArrayList<Relation> Relations = new ArrayList<Relation>();
 		String EdgeFile = "edges.tsv";
 		ArrayList<String> GAO = new ArrayList<String>();
@@ -15,7 +15,6 @@ public class KPath {
 		}
 		System.out.println("GAO: " + GAO);
 		ArrayList<String> schema = null;
-		ArrayList<Integer> AO = null;
 		for ( int i = 0; i < K; i++){
 			schema = new ArrayList<String>();
 			schema.add(GAO.get(i));
@@ -24,9 +23,6 @@ public class KPath {
 			Relations.add(R);
 		}
 		Minesweeper MS = new Minesweeper(Relations, GAO);
-		for ( int i = 0; i< Relations.size(); i++){
-			Relations.get(i).Dump();
-		}
-		MS.Join(Relations).Dump();
+		System.out.println("Found " + MS.Join(Relations).GetSize() + " k paths!");
 	}
 }
