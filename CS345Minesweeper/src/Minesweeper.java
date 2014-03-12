@@ -36,9 +36,26 @@ public class Minesweeper {
 	Relation Join(ArrayList<Relation> Query){ 
 		ArrayList<Tuple> Output = new ArrayList<Tuple>();
 		Tuple t;
+		Tuple t_prev = null;
 		while((t = MyCDS.GetProbepoint()) != null){
-			//t.Dump();
-			//MyCDS.Dump();
+			t.Dump();
+			/*
+			if(t_prev != null && t.equals(t_prev)){
+				int LSVal = t.GetAttrVal(t.GetArity()-1);
+				t.Truncate(t.GetArity()-1);
+				Constraint DupConstraint = new Constraint(t.Value, new IntPair(LSVal-1,LSVal+1));
+				//MyCDS.Dump();
+				//System.out.println("=======================================");
+				//DupConstraint.Dump();
+				MyCDS.InsertConstraint(DupConstraint);
+				//System.out.println("=======================================");
+				//MyCDS.Dump();
+				continue;
+			}
+			t_prev = t;
+			*/
+			//sMyCDS.Dump();
+			if(t.GetAttrVal(0) == 4 && t.GetAttrVal(1) == 144){ MyCDS.Dump();}
 			boolean OutputTupleFlag  = true;
 			// RIndices = Indices[r]: tuple indices for relation Query[r]
 			// RIndices[i] : the i-th index tuple in the count {[i(l)],[i(r)],[i(l),i(ll)],[i(l),i(lh)],[i(h),i(hl)],[i(h),i(hh)],...}

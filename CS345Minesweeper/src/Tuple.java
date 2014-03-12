@@ -36,15 +36,19 @@ public class Tuple {
 		}
 	}
 	
-	public Boolean equals(Tuple t){
-		return false;
-	}
-	
 	public void Dump(){
 		System.out.print("(");
 		for ( int i =0; i< Value.size(); i++){
 			System.out.print(Value.get(i) + ",");
 		}
 		System.out.print(")\n");
+	}
+	
+	public boolean equals(Tuple t){
+		if(t.GetArity() != this.GetArity()){ return false;}
+		for(int i = 0; i < Value.size(); i++){
+			if(this.Value.get(i) != t.GetAttrVal(i)){ return false;}
+		}
+		return true;
 	}
 }
