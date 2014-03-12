@@ -55,7 +55,7 @@ public class Minesweeper {
 			t_prev = t;
 			*/
 			//sMyCDS.Dump();
-			if(t.GetAttrVal(0) == 4 && t.GetAttrVal(1) == 144){ MyCDS.Dump();}
+			//if(t.GetAttrVal(0) == 4 && t.GetAttrVal(1) == 144){ MyCDS.Dump();}
 			boolean OutputTupleFlag  = true;
 			// RIndices = Indices[r]: tuple indices for relation Query[r]
 			// RIndices[i] : the i-th index tuple in the count {[i(l)],[i(r)],[i(l),i(ll)],[i(l),i(lh)],[i(h),i(hl)],[i(h),i(hh)],...}
