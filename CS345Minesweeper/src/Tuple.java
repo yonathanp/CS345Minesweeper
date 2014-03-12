@@ -36,6 +36,10 @@ public class Tuple {
 		}
 	}
 	
+	public Boolean equals(Tuple t){
+		return false;
+	}
+	
 	public void Dump(){
 		System.out.print("(");
 		for ( int i =0; i< Value.size(); i++){
