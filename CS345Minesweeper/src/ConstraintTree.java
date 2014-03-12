@@ -5,10 +5,34 @@ import java.util.ArrayList;
 public class ConstraintTree implements CDS {
 	int GAOLength;	// At any given point the height of the ConstraintTree is at most GAOLength nodes
 	private ConstraintTreeNode Root;
+	double ProbeTimer;
+	double InsertTimer;
+	long ProbeCounter;
+	long InsertCounter;
 	
 	public ConstraintTree(int n) {
 		Root = new ConstraintTreeNode();
 		GAOLength = n;
+		ProbeTimer = 0.0;	// accumulated probing time [ms]
+		InsertTimer = 0.0;	// accumulated constraint insertion time [ms]
+		ProbeCounter = 0;
+		InsertCounter = 0;
+	}
+	
+	public long GetProbeCounter(){
+		return ProbeCounter;
+	}
+	
+	public long GetInsertCounter(){
+		return InsertCounter;
+	}
+	
+	public double GetProbeTimer(){
+		return ProbeTimer;
+	}
+	
+	public double GetInsertTimer(){
+		return InsertTimer;
 	}
 	
 	// for beta-acyclic queries only
@@ -74,6 +98,8 @@ public class ConstraintTree implements CDS {
 	// Algorithm 3 in paper - for beta-acyclic queries only
 	public Tuple GetProbepoint() {
 		//Dump();
+		ProbeCounter++;
+		long Tstart = System.nanoTime();
 		int i = 0;
 		Tuple t = new Tuple(GAOLength);
 		while(i < GAOLength){
@@ -105,12 +131,16 @@ public class ConstraintTree implements CDS {
 			}
 		}
 		t.Truncate(GAOLength);
+		long Tend = System.nanoTime();
+		ProbeTimer += (Tend - Tstart)/1000000.0;
 		return t;
 	}
 
 
 	@Override
 	public void InsertConstraint(Constraint C) {
+		InsertCounter++;
+		long Tstart = System.nanoTime();
 		//C.Dump();
 		// Algorithm 5 in paper
 		ConstraintTreeNode v = Root;
@@ -128,6 +158,8 @@ public class ConstraintTree implements CDS {
 		IntPair Interval = C.GetInterval();
 		v.InsertInterval(Interval);
 		v.DeleteEqualitiesInterval(Interval);
+		long Tend = System.nanoTime();
+		InsertTimer += (Tend - Tstart)/1000000.0;
 	}
 	
 	public void Dump(){

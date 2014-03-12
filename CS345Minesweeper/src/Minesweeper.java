@@ -36,9 +36,9 @@ public class Minesweeper {
 	Relation Join(ArrayList<Relation> Query){ 
 		ArrayList<Tuple> Output = new ArrayList<Tuple>();
 		Tuple t;
-		Tuple t_prev = null;
+		//Tuple t_prev = null;
 		while((t = MyCDS.GetProbepoint()) != null){
-			t.Dump();
+			//t.Dump();
 			/*
 			if(t_prev != null && t.equals(t_prev)){
 				int LSVal = t.GetAttrVal(t.GetArity()-1);
@@ -146,6 +146,10 @@ public class Minesweeper {
 		for(int i = 0; i < GAO.size(); i++){
 			ResultAttrOrder.add(i);
 		}
+		System.out.println("ProbeCounter: " + MyCDS.GetProbeCounter());
+		System.out.println("ProbeTimer: " + MyCDS.GetProbeTimer());
+		System.out.println("InsertCounter: " + MyCDS.GetInsertCounter());
+		System.out.println("InsertTimer: " + MyCDS.GetInsertTimer());
 		return Result;
 	}
 }
