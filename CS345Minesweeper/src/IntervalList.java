@@ -30,7 +30,7 @@ public class IntervalList {
 	// returns true if v is covered by some interval in the IntervalList
 	public boolean Covers(Integer v){
 		Integer u = Data.ceilingKey(v);
-		if ( u == null ){
+		if ( u == null || u.equals(v)){
 			return false;
 		}
 		Integer intervalType = Data.get(u);

@@ -43,7 +43,8 @@ public class Relation {
 		BufferedReader BR = new BufferedReader(new InputStreamReader(IS, Charset.forName("UTF-8")));
 		String line;
 		while ((line = BR.readLine()) != null){
-			String[] values = line.split("\\t");
+			//String[] values = line.split("\\t");
+			String[] values = line.split("\\s+"); // captures both tabs and whitespaces
 			Tuple T = new Tuple();
 			for ( int i = 0; i<values.length; i++){
 				int v = Integer.parseInt(values[i]);
