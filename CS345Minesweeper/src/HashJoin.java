@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class HashJoin {
 	Relation R1;
@@ -63,5 +64,29 @@ public class HashJoin {
 			}
 		}
 	return Output;
+	}
+	
+	public Relation JoinR(){
+		Join();
+		ArrayList<String> Schema = new ArrayList<String>();
+		for( int k=0; k<GAO.size(); k++){
+			if ( R1.GetSchema().contains(GAO.get(k)) ){
+				Schema.add(GAO.get(k));
+			}
+			else if ( R2.GetSchema().contains(GAO.get(k))) {
+				Schema.add(GAO.get(k));
+			}
+		}
+		Relation out = new Relation();
+		out.SetSchema(Schema);
+		
+		Iterator<Tuple> i = Output.iterator();
+		Tuple t = i.next();
+		while(i.hasNext()){
+			out.AddTuple(t);
+			t = i.next();
+		}
+		out.AddTuple(t);
+		return out;
 	}
 }
