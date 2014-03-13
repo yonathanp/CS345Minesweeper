@@ -9,6 +9,7 @@ public class HashJoin {
 	ArrayList<String> JoinAttributes;
 	ArrayList<String> GAO;
 	HashSet<Tuple> Output;
+	int IndexAccessCounter = 0;
 	
 	public HashJoin(Relation R1, Relation R2, ArrayList<String> GAO){
 		this.GAO = new ArrayList<String>(GAO);
@@ -46,6 +47,7 @@ public class HashJoin {
 				Key.add(R2.GetField(i, Field));
 			}
 			ArrayList<Tuple> Candidates = R1Index.GetTuples(Key);
+			IndexAccessCounter++;
 			if (Candidates == null){
 				continue;
 			}
@@ -87,6 +89,7 @@ public class HashJoin {
 			t = i.next();
 		}
 		out.AddTuple(t);
+		System.out.println("Index Access Counter: " + IndexAccessCounter);
 		return out;
 	}
 }

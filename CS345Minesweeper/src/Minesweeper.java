@@ -7,6 +7,7 @@ public class Minesweeper {
 	//GAOIds[r][a] = for relation r: index of the a-th attribute of the relation (according to global order, not relation's schema) in the GAO
 	ArrayList<ArrayList<Integer>> GAOIds; 
 	CDS MyCDS;
+	int LoopCounter;
 	
 	Minesweeper(ArrayList<Relation> Rels, ArrayList<String> AttributeOrder){
 		Relations = new ArrayList<Relation>(Rels);
@@ -30,6 +31,7 @@ public class Minesweeper {
 			R.SetAttributeOrder(AttrOrder);
 			R.CreateIndex();
 		}
+		LoopCounter = 0;
 	}
 	
 	// Algorithm 2 in paper
@@ -56,6 +58,7 @@ public class Minesweeper {
 			*/
 			//sMyCDS.Dump();
 			//if(t.GetAttrVal(0) == 4 && t.GetAttrVal(1) == 144){ MyCDS.Dump();}
+			LoopCounter++;
 			boolean OutputTupleFlag  = true;
 			// RIndices = Indices[r]: tuple indices for relation Query[r]
 			// RIndices[i] : the i-th index tuple in the count {[i(l)],[i(r)],[i(l),i(ll)],[i(l),i(lh)],[i(h),i(hl)],[i(h),i(hh)],...}
@@ -72,7 +75,7 @@ public class Minesweeper {
 				for(int p = 0; p < k; p++){
 					int CurrAttrIdx = AttrOrder.get(p);
 					for(int i = s; i < e; i++){
-						IntPair Gap = R.FindGap(RIndices.get(i), t.GetAttrVal(GAOIds.get(r).get(p)));  
+						IntPair Gap = R.FindGap(RIndices.get(i), t.GetAttrVal(GAOIds.get(r).get(p)));
 						if(Gap == null){ continue;}	// Coordinates of index tuple are out-of-range
 						ArrayList<Integer> IL = new ArrayList<Integer>(RIndices.get(i));
 						IL.add(Gap.GetVal1());
@@ -146,6 +149,12 @@ public class Minesweeper {
 		for(int i = 0; i < GAO.size(); i++){
 			ResultAttrOrder.add(i);
 		}
+		int TotalIndexAccessCounter = 0;
+		for(Relation R : Query){
+			TotalIndexAccessCounter += R.GetIndexAccessCounter();
+		}
+		System.out.println("LoopCounter: " + LoopCounter);
+		System.out.println("IndexAccessCounter: " + TotalIndexAccessCounter);
 		System.out.println("ProbeCounter: " + MyCDS.GetProbeCounter());
 		System.out.println("ProbeTimer: " + MyCDS.GetProbeTimer());
 		System.out.println("InsertCounter: " + MyCDS.GetInsertCounter());

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 // Assumption: all attributes of all relations are restricted to unsigned integers only (natural numbers)
 public class Relation {
+	private int IndexAccessCounter;
 	private ArrayList<Tuple> Data;
 	private ArrayList<String> Schema;
 	// specifies the order of the relation's attributes according to the Global attribute order
@@ -24,6 +25,7 @@ public class Relation {
 	}
 	
 	public Relation(ArrayList<Tuple> D){
+		IndexAccessCounter = 0;
 		Data = D;
 	}
 	
@@ -31,6 +33,7 @@ public class Relation {
 	public Relation(String InFileName){}  // implement a constructor for every input file format we want to support
 
 	public Relation(ArrayList<String> Schema, String InFileName) throws NumberFormatException, IOException{
+		IndexAccessCounter = 0;
 		Data = new ArrayList<Tuple>();
 		SetSchema(Schema);
 		InputStream IS = null;
@@ -44,11 +47,20 @@ public class Relation {
 		String line;
 		while ((line = BR.readLine()) != null){
 			//String[] values = line.split("\\t");
-			String[] values = line.split("\\s+"); // captures both tabs and whitespaces
+			//String[] values = line.split("\\s+"); // captures both tabs and whitespaces
+			String[] values = line.split("\t");	// captures tabs only
 			Tuple T = new Tuple();
 			for ( int i = 0; i<values.length; i++){
-				int v = Integer.parseInt(values[i]);
-				T.AddVal(v);
+				if(Character.isDigit(values[i].charAt(0))){
+					int v = -1;
+					try{
+						v = Integer.parseInt(values[i]);
+					} catch(NumberFormatException e){
+						double dv = Double.parseDouble(values[i]);
+						v = (int) Math.round(dv);
+					}
+					T.AddVal(v);
+				}	
 			}
 			AddTuple(T);
 		}
@@ -120,11 +132,13 @@ public class Relation {
 	
 	public IntPair FindGap(ArrayList<Integer> IndexTuple, int a){
 		if(I == null){ return null;}
+		IndexAccessCounter++;
 		return I.FindGap(IndexTuple, a);
 	}
 	
 	public Tuple RetrieveIndexTuple(ArrayList<Integer> IndexTuple){
 		if(I == null){ return null;}
+		IndexAccessCounter++;
 		int TupleId = I.RetrieveIndexTupleId(IndexTuple);
 		return (TupleId >= 0) ? GetTuple(TupleId) : null;
 	}
@@ -137,6 +151,11 @@ public class Relation {
 	}
 	
 	public boolean IndexTupleInRange(ArrayList<Integer> IndexTuple){
+		IndexAccessCounter++;
 		return I.IsInRange(IndexTuple);
+	}
+	
+	public int GetIndexAccessCounter(){
+		return IndexAccessCounter;
 	}
 }
