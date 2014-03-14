@@ -6,7 +6,7 @@ public class BeerAdvocateJoin {
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		//String InFile = args[0];
-		String InFile = "beeradvocate_dummy.tsv";
+		String InFile = "beeradvocate_dummy_big.tsv";
 		ArrayList<Relation> Relations = new ArrayList<Relation>();
 		ArrayList<String> Schema = new ArrayList<String>();
 		Schema.add("BeerId");
@@ -29,7 +29,7 @@ public class BeerAdvocateJoin {
 		GAO.addAll(Schema);
 		GAO.add("Time1");
 		Benchmark.Test(Relations, GAO);
-		
+		System.out.println("-----------------------------");
 		Schema.remove(0);
 		Schema.remove(0);
 		R.Project(Schema);

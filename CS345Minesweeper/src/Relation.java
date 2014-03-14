@@ -45,12 +45,19 @@ public class Relation {
 		}
 		BufferedReader BR = new BufferedReader(new InputStreamReader(IS, Charset.forName("UTF-8")));
 		String line;
+		int lineCnt = 0;
 		while ((line = BR.readLine()) != null){
+			lineCnt++;
 			//String[] values = line.split("\\t");
 			//String[] values = line.split("\\s+"); // captures both tabs and whitespaces
 			String[] values = line.split("\t");	// captures tabs only
 			Tuple T = new Tuple();
 			for ( int i = 0; i<values.length; i++){
+				System.out.println(lineCnt);
+				if(values[i].isEmpty()){ 
+					T.AddVal(0);  // default value for handling missing entries
+					continue;
+				}
 				if(Character.isDigit(values[i].charAt(0))){
 					int v = -1;
 					try{
