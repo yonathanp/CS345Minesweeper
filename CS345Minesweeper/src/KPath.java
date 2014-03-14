@@ -7,11 +7,11 @@ public class KPath {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// Join: R1(A0,A1), R2(A1,A2),....,Rk(Ak-1,Ak)
 		// GAO: A1,A2,...,Ak,A0
-		//Integer K = Integer.parseInt(args[0]);
-		Integer K = 3;
+		Integer K = Integer.parseInt(args[0]);
+		//Integer K = 3;
 		ArrayList<Relation> Relations = new ArrayList<Relation>(K);
-		//String EdgeFile = args[1];
-		String EdgeFile = "edges.tsv";
+		String EdgeFile = args[1];
+		//String EdgeFile = "edges.tsv";
 		ArrayList<String> GAO = new ArrayList<String>(K+1);
 		for ( Integer i = 0; i <= K; i++){
 			GAO.add("A" + i.toString());
@@ -27,6 +27,8 @@ public class KPath {
 			//R.Dump();
 		}
 		
+		Benchmark.Test(Relations, GAO);
+		/*
 		long startTime = System.currentTimeMillis();
 		Minesweeper MS = new Minesweeper(Relations, GAO);
 		long endTime = System.currentTimeMillis();
@@ -60,5 +62,6 @@ public class KPath {
 		System.out.println("Hash Join: " + (joinTime)/1000.0);
 		
 		System.out.println("Found " + LastRelation.GetSize() + " k paths!");
+		*/
 	}
 }

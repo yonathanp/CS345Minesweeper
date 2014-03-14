@@ -71,9 +71,10 @@ public class Minesweeper {
 				int k = R.GetArity();
 				int s = 0;
 				int e = 1;
-				int cnt = 0;
 				for(int p = 0; p < k; p++){
 					int CurrAttrIdx = AttrOrder.get(p);
+					//System.out.println("S: " + s + " , E: " + e);
+					int cnt = 0;
 					for(int i = s; i < e; i++){
 						IntPair Gap = R.FindGap(RIndices.get(i), t.GetAttrVal(GAOIds.get(r).get(p)));
 						if(Gap == null){ continue;}	// Coordinates of index tuple are out-of-range

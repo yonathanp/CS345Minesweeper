@@ -4,8 +4,42 @@ import java.util.HashSet;
 
 
 public class Benchmark {
+	
+	public static void Test(ArrayList<Relation> Relations, ArrayList<String> GAO){
+		long startTime = System.currentTimeMillis();
+		Minesweeper MS = new Minesweeper(Relations, GAO);
+		long endTime = System.currentTimeMillis();
+		System.out.println("Minesweeper Indices Creation: " + (endTime - startTime)/1000.0);
+		
+		
+		startTime = System.currentTimeMillis();
+		Relation MineOut = MS.Join(Relations);
+		endTime = System.currentTimeMillis();
+		System.out.println("Minesweeper Join: " + (endTime - startTime)/1000.0);
+		System.out.println("Output Size " + MineOut.GetSize() + " tuples");
+
+		Relation LastRelation = Relations.get(0);
+		double indexTime = 0;
+		double joinTime = 0;
+		for ( int i = 1; i < Relations.size(); i++){
+			HashJoin H = new HashJoin(LastRelation, Relations.get(i), GAO);
+			startTime = System.nanoTime();
+			H.CreateIndex();
+			endTime = System.nanoTime();
+			indexTime += (endTime - startTime)/1000000.0;
+			
+			startTime = System.nanoTime();
+			LastRelation = H.JoinR();
+			endTime = System.nanoTime();
+			joinTime += (endTime - startTime)/1000000.0;
+		}
+		System.out.println("Hash Index Creation: " + (indexTime)/1000.0);
+		System.out.println("Hash Join: " + (joinTime)/1000.0);
+		System.out.println("Output Size: " + LastRelation.GetSize() + " tuples");
+	}
 
 	public static void main(String[] args) {
+		/*
 		ArrayList<String> schema1 = new ArrayList<String>(), schema2 = new ArrayList<String>();
 		schema1.add("A");
 		schema1.add("B");
@@ -85,6 +119,7 @@ public class Benchmark {
 			t.Dump();
 		}
 		//TODO: compare output of hash and minesweeper join to make sure they are identical
+	   */
 	}
 
 }

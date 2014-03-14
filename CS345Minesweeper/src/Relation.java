@@ -56,13 +56,18 @@ public class Relation {
 					try{
 						v = Integer.parseInt(values[i]);
 					} catch(NumberFormatException e){
-						double dv = Double.parseDouble(values[i]);
+						double dv = -1;
+						try{
+							dv = Double.parseDouble(values[i]);
+						} catch(NumberFormatException exp){
+							continue;
+						}
 						v = (int) Math.round(dv);
 					}
 					T.AddVal(v);
 				}	
 			}
-			AddTuple(T);
+			if(T.GetArity() > 0){ AddTuple(T);}
 		}
 		try {
 			BR.close();
@@ -157,5 +162,24 @@ public class Relation {
 	
 	public int GetIndexAccessCounter(){
 		return IndexAccessCounter;
+	}
+	
+	public void Project(ArrayList<String> Attrs){
+		int j = 0;
+		int i = 0;
+		while(i < Schema.size()){
+			if(!Schema.get(i).equals(Attrs.get(j))){
+				Schema.remove(i);
+				for(Tuple t : Data){
+					t.Value.remove(i);
+				}
+				for(int k = 0; k < AttributeOrder.size(); k++){
+					if(AttributeOrder.get(k) == i){ AttributeOrder.remove(k);}
+				}
+			} else{
+				j++;
+				i++;
+			}
+		}
 	}
 }
